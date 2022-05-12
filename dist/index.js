@@ -10,6 +10,7 @@ const exec = __nccwpck_require__(514);
 async function installAb() {
    const folder = core.getInput("folder") || "AppBuilder";
    const stack = core.getInput("stack") || "ab";
+   const runtime = core.getInput("runtime") || null;
    const installOpts = [
       `--stack=${stack}`,
       `--port=${core.getInput("port") || 80}`,
@@ -26,6 +27,8 @@ async function installAb() {
       "--tenant.email=neo@thematrix.com",
       `--tenant.url=http://localhost:${core.getInput("port") || 80}`,
    ];
+
+   if (runtime) installOpts.push(`--runtime ${runtime}`);
 
    core.startGroup("Initiliazing Docker Swarm");
    await exec.exec("docker swarm init");
