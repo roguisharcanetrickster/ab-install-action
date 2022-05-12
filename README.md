@@ -17,3 +17,4 @@ with:
 | stack  | ab            | Stack to install with                |
 | folder | AppBuilder    | path to install to                   |
 | port   | 80            | port for the ab_platform_web service |
+| runtime| null          | runtime for ab_runtime test          |

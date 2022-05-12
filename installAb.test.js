@@ -13,7 +13,7 @@ beforeEach(() => {
    delete process.env["INPUT_STACK"];
    delete process.env["INPUT_FOLDER"];
    delete process.env["INPUT_PORT"];
-   delete process.env["INPUT_RUNTIME"]
+   delete process.env["INPUT_RUNTIME"];
    fakeExec.resetHistory();
 });
 
@@ -94,7 +94,7 @@ describe("installer calls exec", () => {
             "--tenant.password=admin",
             "--tenant.email=neo@thematrix.com",
             "--tenant.url=http://localhost:80",
-            "--runtime c3499c2729730a7f807efb8676a92dcb6f8a3f8f",
+            "--runtime=c3499c2729730a7f807efb8676a92dcb6f8a3f8f",
          ],
       ];
       await installAb();
