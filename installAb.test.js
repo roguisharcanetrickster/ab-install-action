@@ -13,6 +13,7 @@ beforeEach(() => {
    delete process.env["INPUT_STACK"];
    delete process.env["INPUT_FOLDER"];
    delete process.env["INPUT_PORT"];
+   delete process.env["INPUT_RUNTIME"]
    fakeExec.resetHistory();
 });
 
@@ -65,6 +66,35 @@ describe("installer calls exec", () => {
             "--tenant.password=admin",
             "--tenant.email=neo@thematrix.com",
             `--tenant.url=http://localhost:8080`,
+         ],
+      ];
+      await installAb();
+
+      assert.equal(fakeExec.callCount, 3);
+      assert.equal(fakeExec.args[0], "docker swarm init");
+      assert.deepEqual(fakeExec.args[1], expected);
+   });
+
+   it("with the input runtime", async () => {
+      process.env["INPUT_RUNTIME"] = "c3499c2729730a7f807efb8676a92dcb6f8a3f8f";
+      const expected = [
+         "npx digi-serve/ab-cli install AppBuilder",
+         [
+            "--stack=ab",
+            "--port=80",
+            "--db.expose=false",
+            "--db.encryption=false",
+            "--db.password=root",
+            "--tag=develop",
+            "--nginx.enable=true",
+            "--ssl.none",
+            "--bot.enable=false",
+            "--smtp.enable=false",
+            "--tenant.username=admin",
+            "--tenant.password=admin",
+            "--tenant.email=neo@thematrix.com",
+            "--tenant.url=http://localhost:80",
+            "--runtime c3499c2729730a7f807efb8676a92dcb6f8a3f8f",
          ],
       ];
       await installAb();
