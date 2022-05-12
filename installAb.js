@@ -22,7 +22,7 @@ async function installAb() {
       `--tenant.url=http://localhost:${core.getInput("port") || 80}`,
    ];
 
-   if (runtime) installOpts.push(`--runtime ${runtime}`);
+   if (runtime) installOpts.push(`--runtime=${runtime}`);
 
    core.startGroup("Initiliazing Docker Swarm");
    await exec.exec("docker swarm init");
