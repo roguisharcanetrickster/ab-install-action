@@ -13,6 +13,10 @@ inputs:
     description: 'Port to use for the main stack'
     required: false
     default: '80'
+  runtime:  # id of input
+    description: 'Runtime to use for ab_runtime test'
+    required: false
+    default: null
         
 # outputs:
 #   time: # output will be available to future steps
