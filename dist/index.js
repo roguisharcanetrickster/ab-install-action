@@ -7456,7 +7456,10 @@ async function installAb() {
 
    core.startGroup("Installing AppBuilder");
 
-   await exec.exec(`npx digi-serve/ab-cli install ${folder}`, installOpts);
+   await exec.exec(
+      `npx https://github.com/digi-serve/ab-cli install ${folder}`,
+      installOpts
+   );
    core.endGroup();
 
    core.startGroup("Waiting for the Stack to come down");
@@ -7520,7 +7523,7 @@ async function rebuildService(repos) {
       services: {},
    };
    core.startGroup(`Rebuilding Docker Images`);
-   core.info(`\u001b[35m - ${repos.join(":test\n  ")}:test`);
+   core.info(`\u001b[35m  ${repos.join(":test\n  ")}:test`);
    const folder = core.getInput("folder") || "AppBuilder";
    const stack = core.getInput("stack") || "ab";
    const builds = [];

@@ -30,7 +30,10 @@ async function installAb() {
 
    core.startGroup("Installing AppBuilder");
 
-   await exec.exec(`npx digi-serve/ab-cli install ${folder}`, installOpts);
+   await exec.exec(
+      `npx https://github.com/digi-serve/ab-cli install ${folder}`,
+      installOpts
+   );
    core.endGroup();
 
    core.startGroup("Waiting for the Stack to come down");
