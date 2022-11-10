@@ -7516,11 +7516,6 @@ const fs = __nccwpck_require__(5747);
 const stackDeploy = __nccwpck_require__(5191);
 
 async function rebuildService(repos) {
-   // build the overrideFile
-   const override = {
-      version: "3.9",
-      services: {},
-   };
    core.startGroup(`Rebuilding Docker Images`);
    core.info(`\u001b[35m  ${repos.join(":test\n  ")}:test`);
    const folder = core.getInput("folder") || "AppBuilder";
@@ -7531,17 +7526,10 @@ async function rebuildService(repos) {
          cwd: `./${repo}`,
       });
       builds.push(build);
-      const shortName = repo.replace("ab_service_", "");
-
-      override.services[shortName] = {
-         image: `${repo}:test`,
-      };
    });
    await Promise.all(builds);
 
-   fs.writeFileSync(`./${folder}/compose.override.yml`, yaml.dump(override));
-
-   await stackDeploy(folder, stack);
+   await stackDeploy(folder, stack, repos);
 }
 module.exports = rebuildService;
 
@@ -7555,7 +7543,43 @@ module.exports = rebuildService;
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
 
-async function stackDeploy(folder, stack) {
+function waitmS(mS) {
+   return new Promise((resolve) => {
+      setTimeout(() => {
+         resolve();
+      }, mS);
+   });
+}
+
+async function isServiceUp(keywordService) {
+   let output = "";
+
+   await exec.exec(
+      `bash -c "docker service ls | grep ${keywordService} | awk '{print $4}'"`,
+      [],
+      {
+         listeners: {
+            stdout: (data) => {
+               output += data.toString();
+            },
+         },
+      }
+   );
+
+   return output.includes("1/1");
+}
+
+function waitServiceUp(keywordService) {
+   return new Promise(async (resolve) => {
+      while (!(await isServiceUp(keywordService))) await waitmS(1000);
+
+      await waitmS(5000);
+
+      resolve();
+   });
+}
+
+async function stackDeploy(folder, stack, images = []) {
    core.startGroup("Deploy the Stack");
    const opts = [
       "-c",
@@ -7563,14 +7587,23 @@ async function stackDeploy(folder, stack) {
       "-c",
       "docker-compose.override.yml",
       "-c",
-      "compose.override.yml",
-      "-c",
       "./test/setup/ci-test.overide.yml",
       stack,
    ];
    await exec.exec("docker stack deploy", opts, { cwd: `./${folder}` });
 
+   await waitServiceUp("sails");
+
+   for (let i = 0; i < images.length; i++) {
+      const shortName = images[i].replace("ab_service_", "");
+
+      await exec.exec(
+         `docker service update --image ${images[i]}:test ${stack}_${shortName}`
+      );
+   }
+
    await exec.exec("docker stack services", [stack]);
+
    core.endGroup();
 }
 module.exports = stackDeploy;
