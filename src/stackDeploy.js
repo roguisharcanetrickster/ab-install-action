@@ -1,42 +1,7 @@
 // docker stack deploy -c $File -c docker-compose.override.yml $TestOveride ab
 const core = require("@actions/core");
 const exec = require("@actions/exec");
-
-function waitmS(mS) {
-   return new Promise((resolve) => {
-      setTimeout(() => {
-         resolve();
-      }, mS);
-   });
-}
-
-async function isServiceUp(keywordService) {
-   let output = "";
-
-   await exec.exec(
-      `bash -c "docker service ls | grep ${keywordService} | awk '{print $4}'"`,
-      [],
-      {
-         listeners: {
-            stdout: (data) => {
-               output += data.toString();
-            },
-         },
-      }
-   );
-
-   return output.includes("1/1");
-}
-
-function waitServiceUp(keywordService) {
-   return new Promise(async (resolve) => {
-      while (!(await isServiceUp(keywordService))) await waitmS(1000);
-
-      await waitmS(5000);
-
-      resolve();
-   });
-}
+const { waitServiceUp } = require("./util/waitService.js");
 
 async function stackDeploy(folder, stack, images = []) {
    core.startGroup("Deploy the Stack");
