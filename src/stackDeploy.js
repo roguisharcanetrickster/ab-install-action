@@ -14,6 +14,9 @@ async function stackDeploy(folder, stack, images = []) {
       "./test/setup/ci-test.overide.yml",
       stack,
    ];
+
+   await exec.exec("npm install -g env-cmd");
+
    await exec.exec("docker stack deploy", opts, { cwd: `./${folder}` });
 
    await waitServiceUp("sails");

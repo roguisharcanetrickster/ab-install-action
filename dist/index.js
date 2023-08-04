@@ -3326,14 +3326,13 @@ async function installAb() {
    const installOpts = [
       `--stack=${stack}`,
       `--port=${core.getInput("port") || 80}`,
-      "--db.expose=false",
-      "--db.encryption=false",
-      "--db.password=root",
+      "--dbExpose=false",
+      "--dbPassword=root",
       "--tag=develop",
-      "--nginx.enable=true",
-      "--ssl.none",
-      "--bot.enable=false",
-      "--smtp.enable=false",
+      "--authType=login",
+      "--relayEnabled=false",
+      "--pwaURL=http://pwa.site.com",
+      "--siteURL=http://auth.site.com",
       "--tenant.username=admin",
       "--tenant.password=admin",
       "--tenant.email=neo@thematrix.com",
@@ -3445,6 +3444,9 @@ async function stackDeploy(folder, stack, images = []) {
       "./test/setup/ci-test.overide.yml",
       stack,
    ];
+
+   await exec.exec("npm install -g env-cmd");
+
    await exec.exec("docker stack deploy", opts, { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
