@@ -17,7 +17,7 @@ async function stackDeploy(folder, stack, images = []) {
 
    await exec.exec("npm install -g env-cmd");
 
-   await exec.exec("docker stack deploy", opts, { cwd: `./${folder}` });
+   await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
 
