@@ -29,7 +29,7 @@ async function installAb() {
 
    core.startGroup("Installing AppBuilder");
 
-   await exec.exec(`npm i https://github.com/digi-serve/ab-cli -g`);
+   await exec.exec(`npm i https://github.com/digi-serve/ab-cli#nh/fix-checkout-rt -g`);
 
    await exec.exec(`appbuilder install ${folder}`, installOpts);
    core.endGroup();
