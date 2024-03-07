@@ -27,7 +27,7 @@ async function installAb() {
    await exec.exec("docker swarm init");
    core.endGroup();
 
-   core.startGroup("Installing AppBuilder");
+   core.startGroup("Installing AppBuilder #dfbbc1b");
 
    await exec.exec(`npm i https://github.com/digi-serve/ab-cli#dfbbc1b -g`);
 
