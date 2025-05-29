@@ -2,8 +2,7 @@ name: "units-test"
 on:
    pull_request:
    push:
-      branches:
-         - main
+      branches: [main, is/update]
          - "releases/*"
 
 jobs:
