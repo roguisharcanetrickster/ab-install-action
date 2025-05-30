@@ -2,9 +2,9 @@ name: "units-test"
 on:
    pull_request:
    push:
-      branches:
-         - main
-         - "releases/*"
+      branches: 
+        - main
+        - "releases/*"
 
 jobs:
    # unit tests
@@ -19,5 +19,5 @@ jobs:
    test:
       runs-on: ubuntu-latest
       steps:
-         - uses: actions/checkout@v4
-         - uses: ./
+      - uses: actions/checkout@v4
+         - path: './'
