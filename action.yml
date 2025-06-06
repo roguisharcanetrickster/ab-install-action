@@ -18,7 +18,7 @@ inputs:
       required: false
       default: null
    repository:
-      description: "Repository name, ex digi-serve/repo"
+      description: "Repository name, ex CruGlobal/repo"
       default: ${{ github.repository }}
 
 # outputs:

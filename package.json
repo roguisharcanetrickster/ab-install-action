@@ -27,7 +27,7 @@
    "dependencies": {
       "@actions/core": "^1.9.0",
       "@actions/exec": "^1.1.1",
-      "ab-cli": "github:digi-serve/ab-cli#master"
+      "ab-cli": "github:CruGlobal/ab-cli#master"
    },
    "devDependencies": {
       "@vercel/ncc": "^0.38.1",

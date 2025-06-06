@@ -8,7 +8,7 @@ beforeEach(() => {
 
 describe("Check Repo", () => {
    it("finds ab_service", () => {
-      process.env["INPUT_REPOSITORY"] = "digi-serve/ab_service_user_manager";
+      process.env["INPUT_REPOSITORY"] = "CruGlobal/ab_service_user_manager";
       const repo = checkRepo();
       assert.equal(repo.type, "service");
       assert.equal(repo.name, "ab_service_user_manager");
@@ -19,7 +19,7 @@ describe("Check Repo", () => {
       assert.equal(repo.type, "n/a");
    });
    it("not ab_service", () => {
-      process.env["INPUT_REPOSITORY"] = "digi-serve/ab-cli";
+      process.env["INPUT_REPOSITORY"] = "CruGlobal/ab-cli";
       const repo = checkRepo();
       assert.equal(repo.type, "n/a");
    });
