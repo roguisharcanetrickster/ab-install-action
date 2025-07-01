@@ -4,7 +4,7 @@ function checkRepo() {
    const [org, repo] = core.getInput("repository").split("/");
    core.info("input", core.getInput("repository"));
    // console.log("repo", repo);
-   if (org == "digi-serve") {
+   if (org == "CruGlobal") {
       if (repo.includes("ab_service_")) {
          return { type: "service", name: repo };
       }

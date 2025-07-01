@@ -7,7 +7,7 @@ Action for GitHub workflows, will perform a AppBuilder production install.
 ## Use
 
 ```yaml
-uses: digi-serve/ab-install-action@v1
+uses: CruGlobal/ab-install-action@v1
 with:
    stack: ab
 ```
@@ -29,5 +29,5 @@ steps:
      with:
         submodules: recursive
         path: ab_service_name
-   - uses: digi-serve/ab-install-action@V1
+   - uses: CruGlobal/ab-install-action@V1
 ```

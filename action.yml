@@ -18,12 +18,12 @@ inputs:
       required: false
       default: null
    repository:
-      description: "Repository name, ex digi-serve/repo"
+      description: "Repository name, ex CruGlobal/repo"
       default: ${{ github.repository }}
 
 # outputs:
 #   time: # output will be available to future steps
 #     description: 'The current time after waiting'
 runs:
-   using: "node16"
+   using: "node22"
    main: "dist/index.js"
