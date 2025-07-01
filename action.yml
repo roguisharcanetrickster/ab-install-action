@@ -25,5 +25,5 @@ inputs:
 #   time: # output will be available to future steps
 #     description: 'The current time after waiting'
 runs:
-   using: "node22"
+   using: "node20"
    main: "dist/index.js"
