@@ -26,17 +26,19 @@ async function installAb() {
 
    core.startGroup("Initiliazing Docker Swarm");
    const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
-   try {
+   let infoOutput = "";
+   await exec.exec('docker info --format "{{.Swarm.LocalNodeState}}"', [], {
+      listeners: {
+         stdout: (data) => {
+            infoOutput += data.toString();
+         },
+      },
+      silent: true,
+   });
+   if (infoOutput.trim() !== "active") {
       await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
-   } catch (err) {
-      if (
-         err.message &&
-         err.message.includes("already part of a swarm")
-      ) {
-         core.info("Already part of a swarm, continuing...");
-      } else {
-         throw err;
-      }
+   } else {
+      core.info("Already part of a swarm, continuing...");
    }
    core.endGroup();
 
