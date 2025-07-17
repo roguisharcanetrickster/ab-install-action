@@ -22,21 +22,7 @@ async function installAb() {
       `--tenant.url=http://localhost:${core.getInput("port") || 80}`,
    ];
 
-   if (runtime) installOpts.push(`--runtime=${runtime}`);
-
-   core.startGroup("Initiliazing Docker Swarm");
-   const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
-   let infoOutput = "";
-   await exec.exec('docker info --format "{{.Swarm.LocalNodeState}}"', [], {
-      listeners: {
-         stdout: (data) => {
-            infoOutput += data.toString();
-         },
-      },
-      silent: true,
-   });
-
-   core.endGroup();
+   if (runtime) installOpts.push(`--runtime=${runtime}`)
 
    core.startGroup("Installing AppBuilder");
 
