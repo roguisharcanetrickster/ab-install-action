@@ -34,26 +34,26 @@ jobs:
 
       - name: Create release zip
         run: |
-          zip -r ab-install-action-1.0.4.zip . \
+          zip -r ab-install-action-1.0.5.zip . \
             -x '*.git*' \
             -x '.github/*' \
             -x 'test/*' \
             -x 'release/*'
 
-      # - name: Create GitHub Release
-      #   id: create_release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     tag_name: v1.0.4
-      #     name: 1.0.4
-      #     generate_release_notes: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.5
+          name: 1.0.5
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Zip
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.4
-          files: ab-install-action-1.0.4.zip
+          tag_name: v1.0.5
+          files: ab-install-action-1.0.5.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
