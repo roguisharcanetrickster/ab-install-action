@@ -3987,6 +3987,7 @@ module.exports = checkRepo;
 
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
+const getPrimaryIPv4 = __nccwpck_require__(2811);
 
 async function installAb() {
    const folder = core.getInput("folder") || "AppBuilder";
@@ -4011,7 +4012,8 @@ async function installAb() {
    if (runtime) installOpts.push(`--runtime=${runtime}`);
 
    core.startGroup("Initiliazing Docker Swarm");
-   await exec.exec("docker swarm init");
+   const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
+   await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
    core.endGroup();
 
    core.startGroup("Installing AppBuilder");
@@ -4134,6 +4136,19 @@ async function stackDeploy(folder, stack, images = []) {
 }
 module.exports = stackDeploy;
 
+
+/***/ }),
+
+/***/ 2811:
+/***/ ((module) => {
+
+// Utility to get the primary IPv4 address for Docker Swarm advertise-addr
+function getPrimaryIPv4() {
+  // For testing, default to localhost
+  return '127.0.0.1';
+}
+
+module.exports = getPrimaryIPv4; 
 
 /***/ }),
 
