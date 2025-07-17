@@ -24,44 +24,36 @@ jobs:
         run: |
           npm ci
 
-      - name: Debug package.json before get version
-        run: |
-          ls -l
-          cat package.json || echo "package.json not found"
-
-      - name: Get version
-        id: get_version
-        run: |
-          echo "version=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_OUTPUT
-
-      - name: Debug package.json after get version
-        run: |
-          cat package.json || echo "package.json not found"
+      # - name: Bump version and push tag
+      #   id: bump_version
+      #   uses: phips28/gh-action-bump-version@v10.1.1
+      #   with:
+      #     tag-prefix: "v"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create release zip
         run: |
-          zip -r ab-install-action-${{ steps.get_version.outputs.version }}.zip . \
+          zip -r ab-install-action-1.0.4.zip . \
             -x '*.git*' \
             -x '.github/*' \
             -x 'test/*' \
             -x 'release/*'
-      - name: Debug version
-        run: echo "VERSION=${{ steps.get_version.outputs.version }}"
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          name: v${{ steps.get_version.outputs.version }}
-          generate_release_notes: true
-          update_existing: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Create GitHub Release
+      #   id: create_release
+      #   uses: softprops/action-gh-release@v2
+      #   with:
+      #     tag_name: v1.0.4
+      #     name: 1.0.4
+      #     generate_release_notes: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Zip
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
-          files: ab-install-action-${{ steps.get_version.outputs.version }}.zip
+          tag_name: v1.0.4
+          files: ab-install-action-1.0.4.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
