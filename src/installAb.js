@@ -23,9 +23,23 @@ async function installAb() {
 
    if (runtime) installOpts.push(`--runtime=${runtime}`);
 
-   core.startGroup("Initiliazing Docker Swarm");
-   await exec.exec("docker swarm init");
-   core.endGroup();
+   // check if in swarm
+   let infoOutput = "";
+   await exec.exec('docker info --format "{{.Swarm.LocalNodeState}}"', [], {
+       listeners: {
+           stdout: (data) => {
+               infoOutput += data.toString();
+           },
+       },
+       silent: true,
+   });
+   if (infoOutput.trim() !== "active") {
+       core.startGroup("Initiliazing Docker Swarm");
+       await exec.exec("docker swarm init");
+       core.endGroup();
+   } else {
+       core.info("Already part of a swarm, continuing...");
+   }
 
    core.startGroup("Installing AppBuilder");
 
