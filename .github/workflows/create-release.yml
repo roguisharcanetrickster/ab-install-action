@@ -40,20 +40,11 @@ jobs:
             -x 'test/*' \
             -x 'release/*'
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.6
-          name: 1.0.6
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload Release Zip
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.6
+          name: 1.0.6
           files: ab-install-action-1.0.6.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
