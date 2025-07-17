@@ -4010,10 +4010,25 @@ async function installAb() {
    ];
 
    if (runtime) installOpts.push(`--runtime=${runtime}`);
+   // check if in swarm
+   let infoOutput = "";
+   await exec.exec('docker info --format "{{.Swarm.LocalNodeState}}"', [], {
+       listeners: {
+           stdout: (data) => {
+               infoOutput += data.toString();
+           },
+       },
+       silent: true,
+   });
+   if (infoOutput.trim() !== "active") {
+       core.startGroup("Initiliazing Docker Swarm v1");
+       const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
+       await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
+       core.endGroup();y
 
-   core.startGroup("Initiliazing Docker Swarm");
-   const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
-   await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
+   } else {
+       core.info("Already part of a swarm, continuing...");
+   }
    core.endGroup();
 
    core.startGroup("Installing AppBuilder");
