@@ -44,7 +44,8 @@ jobs:
             -x '.github/*' \
             -x 'test/*' \
             -x 'release/*'
-
+      - name: Debug version
+        run: echo "VERSION=${{ steps.get_version.outputs.version }}"
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
@@ -52,6 +53,7 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.version }}
           name: v${{ steps.get_version.outputs.version }}
           generate_release_notes: true
+          update_existing: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
