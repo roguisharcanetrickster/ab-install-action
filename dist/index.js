@@ -3987,7 +3987,6 @@ module.exports = checkRepo;
 
 const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
-const getPrimaryIPv4 = __nccwpck_require__(2811);
 
 async function installAb() {
    const folder = core.getInput("folder") || "AppBuilder";
@@ -4005,11 +4004,12 @@ async function installAb() {
       "--siteURL=http://auth.site.com",
       "--tenant.username=admin",
       "--tenant.password=admin",
-      "--tenant.email=neo@thematrix.com",
+      "--tenant.email=admin@email.com",
       `--tenant.url=http://localhost:${core.getInput("port") || 80}`,
    ];
 
    if (runtime) installOpts.push(`--runtime=${runtime}`);
+
    // check if in swarm
    let infoOutput = "";
    await exec.exec('docker info --format "{{.Swarm.LocalNodeState}}"', [], {
@@ -4022,14 +4022,11 @@ async function installAb() {
    });
    if (infoOutput.trim() !== "active") {
        core.startGroup("Initiliazing Docker Swarm v1");
-       const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
        await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
-       core.endGroup();y
-
+       core.endGroup();
    } else {
        core.info("Already part of a swarm, continuing...");
    }
-   core.endGroup();
 
    core.startGroup("Installing AppBuilder");
 
@@ -4040,6 +4037,13 @@ async function installAb() {
 
    core.startGroup("Waiting for the Stack to come down");
    await waitClosed(stack, 1);
+   core.endGroup();
+
+   core.startGroup("starting test AppBuilder");
+
+   await exec.exec(`npm run test:boot`);
+   await exec.exec(`npm run test:boot`);
+
    core.endGroup();
 
    return;
@@ -4151,19 +4155,6 @@ async function stackDeploy(folder, stack, images = []) {
 }
 module.exports = stackDeploy;
 
-
-/***/ }),
-
-/***/ 2811:
-/***/ ((module) => {
-
-// Utility to get the primary IPv4 address for Docker Swarm advertise-addr
-function getPrimaryIPv4() {
-  // For testing, default to localhost
-  return '127.0.0.1';
-}
-
-module.exports = getPrimaryIPv4; 
 
 /***/ }),
 

@@ -35,7 +35,7 @@ async function installAb() {
    });
    if (infoOutput.trim() !== "active") {
        core.startGroup("Initiliazing Docker Swarm v1");
-       await exec.exec("docker swarm init");
+       await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
        core.endGroup();
    } else {
        core.info("Already part of a swarm, continuing...");
