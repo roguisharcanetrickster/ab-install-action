@@ -24,14 +24,6 @@ jobs:
         run: |
           npm ci
 
-      - name: Bump version and push tag
-        id: bump_version
-        uses: phips28/gh-action-bump-version@v10.1.1
-        with:
-          tag-prefix: "v"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Debug package.json before get version
         run: |
           ls -l
