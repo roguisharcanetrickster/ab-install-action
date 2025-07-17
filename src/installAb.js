@@ -1,6 +1,5 @@
 const core = require("@actions/core");
 const exec = require("@actions/exec");
-const getPrimaryIPv4 = require("./util/getPrimaryIPv4");
 
 async function installAb() {
    const folder = core.getInput("folder") || "AppBuilder";
@@ -18,11 +17,15 @@ async function installAb() {
       "--siteURL=http://auth.site.com",
       "--tenant.username=admin",
       "--tenant.password=admin",
-      "--tenant.email=neo@thematrix.com",
+      "--tenant.email=admin@email.com",
       `--tenant.url=http://localhost:${core.getInput("port") || 80}`,
    ];
 
-   if (runtime) installOpts.push(`--runtime=${runtime}`)
+   if (runtime) installOpts.push(`--runtime=${runtime}`);
+
+   core.startGroup("Initiliazing Docker Swarm");
+   await exec.exec("docker swarm init");
+   core.endGroup();
 
    core.startGroup("Installing AppBuilder");
 
@@ -33,6 +36,12 @@ async function installAb() {
 
    core.startGroup("Waiting for the Stack to come down");
    await waitClosed(stack, 1);
+   core.endGroup();
+
+   core.startGroup("starting test AppBuilder");
+
+   await exec.exec(`npm run test:boot`);
+
    core.endGroup();
 
    return;
