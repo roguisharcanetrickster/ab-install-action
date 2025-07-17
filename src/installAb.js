@@ -41,6 +41,7 @@ async function installAb() {
    core.startGroup("starting test AppBuilder");
 
    await exec.exec(`npm run test:boot`);
+   await exec.exec(`npm run test:boot`);
 
    core.endGroup();
 
