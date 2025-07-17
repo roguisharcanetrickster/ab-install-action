@@ -35,11 +35,7 @@ async function installAb() {
       },
       silent: true,
    });
-   if (infoOutput.trim() !== "active") {
-      await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
-   } else {
-      core.info("Already part of a swarm, continuing...");
-   }
+
    core.endGroup();
 
    core.startGroup("Installing AppBuilder");
