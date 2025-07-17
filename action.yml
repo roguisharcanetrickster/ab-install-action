@@ -20,6 +20,10 @@ inputs:
    repository:
       description: "Repository name, ex CruGlobal/repo"
       default: ${{ github.repository }}
+   advertise_addr: # id of input
+      description: "IP address to advertise for Docker Swarm (optional)"
+      required: false
+      default: ""
 
 # outputs:
 #   time: # output will be available to future steps

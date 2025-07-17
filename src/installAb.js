@@ -1,5 +1,6 @@
 const core = require("@actions/core");
 const exec = require("@actions/exec");
+const getPrimaryIPv4 = require("./util/getPrimaryIPv4");
 
 async function installAb() {
    const folder = core.getInput("folder") || "AppBuilder";
@@ -24,7 +25,8 @@ async function installAb() {
    if (runtime) installOpts.push(`--runtime=${runtime}`);
 
    core.startGroup("Initiliazing Docker Swarm");
-   await exec.exec("docker swarm init");
+   const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
+   await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
    core.endGroup();
 
    core.startGroup("Installing AppBuilder");
