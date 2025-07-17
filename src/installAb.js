@@ -26,7 +26,18 @@ async function installAb() {
 
    core.startGroup("Initiliazing Docker Swarm");
    const advertiseAddr = core.getInput("advertise_addr") || getPrimaryIPv4();
-   await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
+   try {
+      await exec.exec(`docker swarm init --advertise-addr ${advertiseAddr}`);
+   } catch (err) {
+      if (
+         err.message &&
+         err.message.includes("already part of a swarm")
+      ) {
+         core.info("Already part of a swarm, continuing...");
+      } else {
+         throw err;
+      }
+   }
    core.endGroup();
 
    core.startGroup("Installing AppBuilder");

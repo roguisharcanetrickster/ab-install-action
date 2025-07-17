@@ -40,7 +40,7 @@ describe("installer calls exec", () => {
       await installAb();
 
       assert.equal(fakeExec.callCount, 4);
-      assert.equal(fakeExec.args[0], "docker swarm init");
+      assert.equal(fakeExec.args[0], "docker swarm init --advertise-addr 127.0.0.1");
       assert.deepEqual(fakeExec.args[2], expected);
    });
 
@@ -69,7 +69,7 @@ describe("installer calls exec", () => {
       await installAb();
 
       assert.equal(fakeExec.callCount, 4);
-      assert.equal(fakeExec.args[0], "docker swarm init");
+      assert.equal(fakeExec.args[0], "docker swarm init --advertise-addr 127.0.0.1");
       assert.deepEqual(fakeExec.args[2], expected);
    });
 
@@ -97,7 +97,7 @@ describe("installer calls exec", () => {
       await installAb();
 
       assert.equal(fakeExec.callCount, 4);
-      assert.equal(fakeExec.args[0], "docker swarm init");
+      assert.equal(fakeExec.args[0], "docker swarm init --advertise-addr 127.0.0.1");
       assert.deepEqual(fakeExec.args[2], expected);
    });
 });
